@@ -1,0 +1,1 @@
+1. The topics.html will be turned into a page that displays all members of that persons league 
