@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .models import Topic
+from .forms import TopicForm
 
 # Create your views here.
 def index(request):
@@ -19,4 +20,22 @@ def topic(request, topic_id):
     entries = topic.entry_set.order_by('-date_added')
     context = {'topic': topic, 'entries': entries}
     return render(request, 'fantasy_dashboardapp/topic.html', context)
+
+def new_topic(request):
+    '''Adding a new topic'''
+    if request.method != 'POST':
+        #No data submitted, create a blank form 
+        form = TopicForm()
+    else:
+        #POST data submmitted then process 
+        form = TopicForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('fantasy_dashboardapp:topics')
     
+    # Display a blank or invalid form 
+    context = {'form': form}
+    return render(request, 'fantasy_dashboardapp/new_topic.html', context)
+
+
+
