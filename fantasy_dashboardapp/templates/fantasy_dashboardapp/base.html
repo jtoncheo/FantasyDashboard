@@ -1,6 +1,11 @@
 <p>
     <a href="{% url 'fantasy_dashboardapp:index' %}">Fantasy Dashboard</a> - 
-    <a href="{% url 'fantasy_dashboardapp:topics' %}">Topics</a>
+    <a href="{% url 'fantasy_dashboardapp:topics' %}">Topics</a> -
+    {% if user.is_authenticated %}
+        Hello, {{ user.username }}.
+    {% else %}
+        <a href="{% url 'users:login' %}">Login</a>
+    {% endif %}
 </p>
 
 {% block content %}{% endblock content %}
