@@ -1,0 +1,15 @@
+{% extends "fantasy_dashboardapp/base.html" %}
+
+{% block content %}
+
+    <p><a href="{% url 'fantasy_dashboardapp:topic' topic.id %}">{{ topic }}</a></p>
+
+    <p>Edit entry:</p>
+
+    <form action="{% url 'fantasy_dashboardapp:edit_entry' entry.id%}" method='post'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button name="submit">Save changes</button>
+    </form>
+
+{% endblock content %}
