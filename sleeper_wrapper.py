@@ -47,18 +47,33 @@ def get_roster(leagueID):
         starters[responses['owner_id']] = responses['starters']
     return rosters, starters
 
+def get_finalroster(players, owner):
+    roster = players
+    owner = owner
+    filename = 'player_list.txt'
+    with open(filename, 'r') as file_object:
+        data = json.load(file_object) 
+    translated_roster = {}
+    for items in roster[owner]:
+        translated_roster[items] = data[items][0], data[items][1]
+    print("Player List: \n")
+    for items in translated_roster: 
+        print(f"{translated_roster[items][0]} {translated_roster[items][1]}")
+
+
 def create_playerdict():
-    filename = 'master_player_list.json'
+    filename = 'master_player_list.json' 
+    filename_curated = 'player_list.txt'
     player_dict = {}
     with open(filename) as file_object: 
         data = json.load(file_object)
     for items in data:
-        #print(data[items]['first_name'])
         key = items
         firstname = data[items]['first_name']
         lastname = data[items]['last_name']
         player_dict[key] = firstname, lastname
-    print(player_dict)
+    with open(filename_curated, 'w') as file_object: 
+        file_object.write(json.dumps(player_dict))
 
 
 
@@ -68,13 +83,18 @@ def update_playermaster():
     response = requests.get(url).json()
     with open(filename, 'w') as file_object: 
         file_object.write(json.dumps(response))
+
 #Main part of the program
-
-# message = input("Please input your Sleeper Username: ")
-# userID = get_user(message)
-# leagues = get_leagues(userID)
-# print(f'Here are your leagues:\n {leagues}')
-# message = input("Which League do you want to list rosters for? Please enter the numeric ID: ")
-# get_roster(message)
-
-create_playerdict()
+message = input("Please input your Sleeper Username: ")
+userID = get_user(message)
+leagues = get_leagues(userID)
+print(leagues)
+for items in leagues:
+    if leagues[items] != None:
+        print(leagues[items]) 
+        roster, starters = get_roster(str(leagues[items]))
+        print(roster)
+        print(roster[userID])
+        get_finalroster(roster[userID], userID)
+    else: 
+        print(f"{leagues[items]} has not drafted yet.")
