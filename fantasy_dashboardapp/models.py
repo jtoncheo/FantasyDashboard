@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 '''This will be repurposed later to hold topic information for the website'''
@@ -6,6 +7,7 @@ class Topic(models.Model):
 
     text = models.CharField(max_length=200)
     date_added = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         '''This helper method returns a string of the model'''
